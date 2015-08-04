@@ -22,27 +22,28 @@ class MainWindow < FXMainWindow
     packer = FXPacker.new( @group1, :opts => LAYOUT_FILL)
     hframe = FXHorizontalFrame.new( packer, :opts => LAYOUT_FILL_X)
     
-    by_radio = FXRadioButton.new( hframe, '') ;
+
+    by_check = FXCheckButton.new( hframe, '') ;
       by_icon = FXPNGIcon.new( app, File.open("../../../img/icons/by.png","rb").read );
     by_icon_label = FXLabel.new( hframe, "BY" , :icon => by_icon);
     
-    cc_radio = FXRadioButton.new( hframe, '') ;
+    cc_check = FXCheckButton.new( hframe, '') ;
       cc_icon = FXPNGIcon.new( app, File.open("../../../img/icons/cc.png","rb").read );
     cc_icon_label = FXLabel.new( hframe, "CC" , :icon => cc_icon);
     
-    nc_radio = FXRadioButton.new( hframe, '') ;
+    nc_check = FXCheckButton.new( hframe, '') ;
       nc_icon = FXPNGIcon.new( app, File.open("../../../img/icons/nc.png","rb").read );
     nc_icon_label = FXLabel.new( hframe, "NC" , :icon => nc_icon);
     
-    nc_eu_radio = FXRadioButton.new( hframe, '') ;
+    nc_eu_check = FXCheckButton.new( hframe, '') ;
       nc_eu_icon = FXPNGIcon.new( app, File.open("../../../img/icons/nc-eu.png","rb").read );
     nc_eu_icon_label = FXLabel.new( hframe, "NC-EU" , :icon => nc_eu_icon);
     
-    nc_jp_radio = FXRadioButton.new( hframe, '') ;
+    nc_jp_check = FXCheckButton.new( hframe, '') ;
       nc_jp_icon = FXPNGIcon.new( app, File.open("../../../img/icons/nc-jp.png","rb").read );
     nc_jp_icon_label = FXLabel.new( hframe, "NC-JP" , :icon => nc_jp_icon);
     
-    nd_radio = FXRadioButton.new( hframe, '') ;
+    nd_check = FXCheckButton.new( hframe, '') ;
       nd_icon = FXPNGIcon.new( app, File.open("../../../img/icons/nd.png","rb").read );
     nd_icon_label = FXLabel.new( hframe, "ND" , :icon => nd_icon);
     
@@ -80,89 +81,16 @@ class MainWindow < FXMainWindow
 
     FXMenuTitle.new( menu_bar, "File", :popupMenu => file_menu );
 
-    new_cmd = FXMenuCommand.new( file_menu, "Start Capture With FFI::PCap..." );
-
-    new_cmd.connect( SEL_COMMAND) do
-      #handler for net capture
-      theCapture = FFI::PCap::Live.new( :dev=> FFI::PCap.device_names[ @intrflistbox.currentItem ] );
-      theCapture.stats
-      theCapture.stats.ps_recv
-      theCapture.datalink.describe
-      packets=[]
-
-      theCaptureThread = Thread.new do
-          theCapture.loop( :count =>50 ) do | this,pkt |   # :count => -1 for infinite loop, break with .breakloop method
-          # packets << pkt
-          puts "#{pkt.time} :: #{pkt.len}"
-          pkt.body.each_byte {|x| print "%0.2x " % x }
-          putc "\n"
-          sleep(1);
-        end
-      end
-
-    end
-
-    #temporalilly disable it because its causing hang-outs on the GUI.
-    new_cmd.enabled = false;
-
-    new_cmd_2 = FXMenuCommand.new(file_menu, "Start Capture With PCaprub...");
-
-    new_cmd_2.connect( SEL_COMMAND) do
-
-      Thread.new do
-      mypcap = ::Pcap.new
-
-      dev = PCAPRUB::Pcap.lookupdev
-
-      packetsize = 65535 ;
-
-      promiscous_mode = true ;
-      timeout = 0 ;
-
-      # system("ifconfig", dev, "up")
-
-      capture = ::Pcap.open_live( dev, packetsize, promiscous_mode, timeout ) ;
-
-      capture_packets = 10
-
-      begin
-        capture.each do |packet|
-          print packet ;
-
-          # @table.appendRows( 34 );
-          # @table.insertRows( "rr", 1, false );
-
-        end
-
-# ^C to stop sniffing
-      rescue Interrupt
-        puts "\nPacket Capture stopped by interrupt signal."
-
-      rescue Exception => e
-        puts "\nERROR: #{e}"
-        retry
-      end #loop ends here
-
-      if capture.datalink == PCAPRUB::Pcap::DLT_EN10MB
-        puts "Ethernet 10MB Link detected"
-      end
-
-        end #Thread code ends here
-
-    end #command code ends here
+    new_cmd = FXMenuCommand.new( file_menu, "(empty for now...)" );
 
     options_menu = FXMenuPane.new ( self) ;
     FXMenuTitle.new( menu_bar,"Options", :popupMenu=> options_menu) ;
-    dissector_sub_menu = FXMenuTitle.new( options_menu,"Enable Disector",nil ) ;
-    #future code for dynamic generation of disectors menu.
-
+    option_sub_menu = FXMenuTitle.new( options_menu,"(nothing for now)",nil ) ;
+    
     about_menu = FXMenuPane.new(self) ;
     FXMenuTitle.new( menu_bar,"About", :popupMenu => about_menu ) ;
-    ver_wpcap = FXMenuCommand.new( about_menu, "Wpcap Version") ;
-    ver_wpcap.connect(SEL_COMMAND) do
-      puts FFI::Pcap.lib_version ;
-      puts FFI::Pcap.lib_version_number ;
-    end
+    info = FXMenuCommand.new( about_menu, "What's the fuzz about...") ;
+
 
     FXMenuSeparator.new( file_menu) ;
     exit_cmd = FXMenuCommand.new( file_menu, "Exit") ;
