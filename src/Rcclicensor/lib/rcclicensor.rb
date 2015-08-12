@@ -14,14 +14,25 @@ class MainWindow < FXMainWindow
     #this is the main frame
     @main_frame = FXVerticalFrame.new(self, :opts => LAYOUT_FILL) ;
     add_menu_bar() ;
-    @group1 = FXGroupBox.new( @main_frame, "Choose your license",
-                              GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X) ;
+    
+    @main_window_splitter = FXSplitter.new( @main_frame, :opts=> SPLITTER_HORIZONTAL|LAYOUT_FILL);
+    
+    @group_dir_list = FXGroupBox.new( @main_window_splitter, "Directory Selection",
+                                      GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X) ;
+    
+    dirlist = FXDirList.new( @group_dir_list, 
+                             :opts => ( TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|FRAME_SUNKEN|FRAME_THICK|
+                                        LAYOUT_FILL_X|LAYOUT_FILL_Y)) ;
+    
+    @group_licenses = FXGroupBox.new( @main_window_splitter, "Choose your license",
+                              GROUPBOX_TITLE_CENTER|FRAME_RIDGE|LAYOUT_FILL_X) ;
                             
+          
+    
     #add cc-options radio buttons at the packer, and then the packer at the group
     #add a radio box with no string, add the icon, and finally add the license label png icon
-    packer = FXPacker.new( @group1, :opts => LAYOUT_FILL)
+    packer = FXPacker.new( @group_licenses, :opts => LAYOUT_FILL)
     hframe = FXHorizontalFrame.new( packer, :opts => LAYOUT_FILL_X)
-    
 
     by_check = FXCheckButton.new( hframe, '') ;
       by_icon = FXPNGIcon.new( app, File.open("../../../img/icons/by.png","rb").read );
@@ -48,15 +59,13 @@ class MainWindow < FXMainWindow
     nd_icon_label = FXLabel.new( hframe, "ND" , :icon => nd_icon);
     
     
-    @group2 = FXGroupBox.new( @main_frame, "(space)",
+    @group2 = FXGroupBox.new( @main_frame, "image files on selected direcory",
                             GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X|LAYOUT_FILL_Y)
+    image_list = FXList.new( @group2, :opts=>LAYOUT_FILL_X|LAYOUT_FILL_Y   ) ;                      
+    
     @group3 = FXGroupBox.new( @main_frame, "Status",
                             GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X|LAYOUT_FILL_Y)
-    
-    
-
-    add_table() ;
-
+   
     @status_bar= FXStatusBar.new( @main_frame,
                               LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X|STATUSBAR_WITH_DRAGCORNER ) ;
 
@@ -91,7 +100,6 @@ class MainWindow < FXMainWindow
     FXMenuTitle.new( menu_bar,"About", :popupMenu => about_menu ) ;
     info = FXMenuCommand.new( about_menu, "What's the fuzz about...") ;
 
-
     FXMenuSeparator.new( file_menu) ;
     exit_cmd = FXMenuCommand.new( file_menu, "Exit") ;
     exit_cmd.connect(SEL_COMMAND) do
@@ -100,36 +108,12 @@ class MainWindow < FXMainWindow
 
   end
 
-  def add_table
-
-    @table = FXTable.new( @group2, :opts=> LAYOUT_FILL ) ;
-    # @table.horizontalGridShown = false;
-    # @table.verticalGridShown = false;
-    @table.tableStyle |= TABLE_COL_SIZABLE
-    # @table.editable = false;
-    @table.setTableSize( 1,1, false) ;
-    @table.setColumnText(0, "col1") ;
-    @table.setRowText( 0, "row1") ;
-    @table.rowHeaderMode = LAYOUT_FIX_WIDTH ;
-    @table.rowHeaderWidth = 0;
-    # @table.columnHeaderHeight = 15;
-
-    @table.setItemText( 0, 0, "test item") ;
-    # @table.setItemText( 2, 1, "This is a spanning Item") ;
-    # @table.setItemJustify( 2, 1, FXTableItem::CENTER_X) ;
-    # spanning_item = @table.getItem( 2, 1) ;
-    # @table.setItem( 2, 2, spanning_item ) ;
-    # @table.setItem( 2, 3, spanning_item ) ;
-    # @table.setItem( 3, 1, spanning_item ) ;
-    # @table.setItem( 3, 2, spanning_item ) ;
-    # @table.setItem( 3, 3, spanning_item ) ;
-
-  end
+  
 
 end #fxmainwindow ends here.
 
   app = FXApp.new
-   test = MainWindow.new( app, "Rcclicensor welcomes you", 800, 300)
+   test = MainWindow.new( app, "Rcclicensor welcomes you", 1000, 600)
 
   app.create
   app.run
