@@ -19,7 +19,7 @@ class LicenseView < FXHorizontalFrame
   #
   #Params:
   #+theParent+::
-  #++iconfilepath+::something like: "../../../icons/test.ico"
+  #++iconfilepath+::something like: "../../../img/icons/test.ico"
   def initialize( theParent, iconfilepath )
     
     @theIconFilepath = iconfilepath;
@@ -32,7 +32,6 @@ class LicenseView < FXHorizontalFrame
 
     fnwt = iconfilepath[/[^\/^\\]*(\w+)$/].split(/[\.]/); #regex to match the filename.extension and then split them to
                                                                #take the filename and extension.
-
     case
     when fnwt[1] == "png"
       @theIcon = FXPNGIcon.new( app, File.open( theIconFilepath ,"rb").read); #or use self.theIconFilepath
@@ -59,9 +58,8 @@ class LicenseView < FXHorizontalFrame
     when fnwt[1] == "xpm"
       @theIcon = FXXPMIcon.new( app, File.open( theIconFilepath ,"rb").read); #or use self.theIconFilepath  
     end
-   
     
-    @theFXLabel = FXLabel.new( self, "BY", :icon => @theIcon );    
+    @theFXLabel = FXLabel.new( self, fnwt[0], :icon => @theIcon );    
     
   end
     
