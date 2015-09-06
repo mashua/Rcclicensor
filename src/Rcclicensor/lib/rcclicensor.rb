@@ -36,7 +36,7 @@ class MainWindow < FXMainWindow
     #add a radio box with no string, add the icon, and finally add the license label png icon
     #packer = FXPacker.new( @group_licenses, :opts => LAYOUT_FILL)
     licenses_matrix = LicenseMatrixView.new( @group_licenses, "../../../img/icons/" );
-    licenses_matrix.load_licenses(  );
+    licenses_matrix.load_licenses();
     
     @group2 = FXGroupBox.new( @main_window_splitter, "image files on selected direcory",
                             GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X|LAYOUT_FILL_Y)
@@ -86,7 +86,6 @@ class MainWindow < FXMainWindow
 
   end
 
-  
 
 end #fxmainwindow ends here.
 

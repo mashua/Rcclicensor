@@ -15,6 +15,8 @@ class LicenseView < FXHorizontalFrame
   attr_accessor :theIcon; #this is to be of type unknown
   attr_accessor :theFXLabel;
   attr_accessor :theIconFilepath;
+  attr_accessor :licenseViewWidth;
+  attr_accessor :licenseViewHeight;
   
   #
   #Params:
@@ -59,7 +61,11 @@ class LicenseView < FXHorizontalFrame
       @theIcon = FXXPMIcon.new( app, File.open( theIconFilepath ,"rb").read); #or use self.theIconFilepath  
     end
     
-    @theFXLabel = FXLabel.new( self, fnwt[0], :icon => @theIcon );    
+    @theFXLabel = FXLabel.new( self, fnwt[0], :icon => @theIcon ); 
+    
+    #keep the width and height as the view's attributes    
+    self.licenseViewWidth = 18;
+    self.licenseViewHeight = 18;
     
   end
     
