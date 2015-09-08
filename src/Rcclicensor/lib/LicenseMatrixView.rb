@@ -27,7 +27,8 @@ class LicenseMatrixView < FXScrollWindow
     
     iconFiles.each { |iconelement|  #create the icons
       temp = LicenseView.new( @theLicensesMatrix, iconelement );
-      @totalLicenses = @totalLicenses+1;
+#      @totalLicenses = @totalLicenses+1;
+      @totalLicenses +=1;
       
       puts "Adding license number: #{@totalLicenses}, with:"
       puts "width #{temp.licenseViewWidth} and height #{temp.licenseViewHeight}" ;
@@ -40,10 +41,10 @@ class LicenseMatrixView < FXScrollWindow
   
   def layout
     
-    puts "CONTENT LAYOUT CHANGE!!!!"
-    puts "Licenses Loaded: #{@totalLicenses}"
-    puts "Current width is: #{self.width}"
-    puts "Current height is: #{self.height}"
+#    puts "CONTENT LAYOUT CHANGE!!!! in matrix"
+#    puts "Licenses Loaded: #{@totalLicenses}"
+#    puts "Current width is: #{self.width}"
+#    puts "Current height is: #{self.height}"
     
     contentWindow.numColumns  =  self.width / LICENSE_ELEMENT_WIDTH;
     

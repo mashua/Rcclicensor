@@ -25,11 +25,21 @@ class MainWindow < FXMainWindow
                                       GROUPBOX_TITLE_LEFT|FRAME_RIDGE|LAYOUT_FILL_X) ;
     
     dirlist = FXDirList.new( @group_dir_list, 
-                             :opts => ( TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|FRAME_SUNKEN|FRAME_THICK|
-                                        LAYOUT_FILL_X|LAYOUT_FILL_Y)) ;
+                             :opts => ( DIRLIST_NO_OWN_ASSOC|DIRLIST_SHOWFILES|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|FRAME_SUNKEN|FRAME_THICK|
+                                        LAYOUT_FILL_X|LAYOUT_FILL_Y) ) ;
+                                    
+    dirlist.setDirectory("/home/mashua/Pictures",false);
+    puts dirlist.pattern = "*.jpg"
+    
+    #Called whenever the selection is changed
+    dirlist.connect(SEL_CHANGED) { 
+      
+      puts "Selected Item is: #{dirlist.currentFile }"
+      
+    }
     
     @group_licenses = FXGroupBox.new( @directory_licenses_splitter, "Choose your license",
-                              GROUPBOX_TITLE_CENTER|FRAME_RIDGE|LAYOUT_FILL_X) ;
+                                      GROUPBOX_TITLE_CENTER|FRAME_RIDGE|LAYOUT_FILL_X) ;
                             
     
     #add cc-options radio buttons at the packer, and then the packer at the group
@@ -50,7 +60,18 @@ class MainWindow < FXMainWindow
 
     @clockLabel = FXLabel.new( @status_bar, Time.now().strftime("%I:%M:%S %p" ), nil,
                                LAYOUT_FILL_Y|LAYOUT_RIGHT|FRAME_SUNKEN ) ;
-
+    
+    @main_window_splitter.setSplit(0, self.height / 2) ;
+    @main_window_splitter.setSplit(1, (self.height / 2) + 100 ) ;
+    
+#    @main_window_splitter.connect(SEL_CHANGED) { |sender, sel, ptr|
+#      
+##      layout();
+##      puts "Ouch!"
+#      @main_window_splitter.setSplit(0, self.height / 2) ;
+#      @main_window_splitter.setSplit(1, self.height / 2) ;
+#    
+#    }
 
   end
 
@@ -86,6 +107,25 @@ class MainWindow < FXMainWindow
 
   end
 
+#  def layout
+#    
+#    puts "CONTENT LAYOUT CHANGE in main form!!!!"
+#    puts "Current width is: #{self.width}"
+#    puts "Current height is: #{self.height}"
+#    if @main_window_splitter.getSplit(0).to_i == (self.height/2).to_i && 
+#       @main_window_splitter.getSplit(1).to_i == (self.height/2).to_i
+#      return;
+#    
+#    else
+#      @main_window_splitter.setSplit(0, self.height / 2) ;
+#      @main_window_splitter.setSplit(1, self.height / 2) ;
+#    end
+#    
+#    puts @main_window_splitter.getSplit(0);
+#    puts @main_window_splitter.getSplit(1);
+#    super
+#    
+#  end
 
 end #fxmainwindow ends here.
 
